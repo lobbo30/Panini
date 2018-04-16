@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaniniTesting", "PaniniTesting\PaniniTesting.csproj", "{3444E478-CDD3-4D17-8FA4-59058A12EC3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaniniEngine", "PaniniEngine\PaniniEngine.csproj", "{E0358377-DEB7-4926-9BE1-75B62BD8E388}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3444E478-CDD3-4D17-8FA4-59058A12EC3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3444E478-CDD3-4D17-8FA4-59058A12EC3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3444E478-CDD3-4D17-8FA4-59058A12EC3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3444E478-CDD3-4D17-8FA4-59058A12EC3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0358377-DEB7-4926-9BE1-75B62BD8E388}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0358377-DEB7-4926-9BE1-75B62BD8E388}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0358377-DEB7-4926-9BE1-75B62BD8E388}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0358377-DEB7-4926-9BE1-75B62BD8E388}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
