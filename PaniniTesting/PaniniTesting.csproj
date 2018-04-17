@@ -58,6 +58,8 @@
     <Compile Include="GetFiguritasFaltantesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GetFiguritasRepetidasTests.cs" />
+    <Compile Include="IntersectarTests.cs" />
+    <Compile Include="PuedeIntercambiarTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PaniniEngine\PaniniEngine.csproj">
