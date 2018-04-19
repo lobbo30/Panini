@@ -43,10 +43,10 @@ namespace PaniniTesting
         public void BFS_WithBigNumberOfNodes()
         {
             const int number = 10000;
-            List<GraphNode<int>> nodes = new List<GraphNode<int>>();
+            List<GraphNode<int>> vertices = new List<GraphNode<int>>();
             for (int i = 0; i < number; i++)
             {
-                nodes.Add(new GraphNode<int>() { Key = i });
+                vertices.Add(new GraphNode<int>() { Key = i });
             }
 
             Random random = new Random();
@@ -56,19 +56,23 @@ namespace PaniniTesting
                 List<GraphNode<int>> temp = new List<GraphNode<int>>();
                 for (int i = 0; i < random.Next(number); i++)
                 {
-                    temp.Add(nodes[random.Next(number)]);
+                    int aleatorio = random.Next(number);
+                    if (!temp.Contains(vertices[aleatorio]))
+                    {
+                        temp.Add(vertices[aleatorio]);
+                    }
                 }
                 adjs.Add(temp);
             }
            
             Graph<int> grafo = new Graph<int>()
             {
-                V = nodes,
+                V = vertices,
                 Adj = adjs
             };
 
             GraphManager gm = new GraphManager();
-            gm.BFS(grafo, nodes[random.Next(number)]);
+            gm.BFS(grafo, vertices[random.Next(number)]);
 
             Assert.IsTrue(grafo.V.All(v => v.Color == GraphNodeColor.Black));
         }
