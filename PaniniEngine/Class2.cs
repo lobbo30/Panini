@@ -28,8 +28,8 @@ namespace PaniniEngine.Graphs
     public class Graph<T>
         where T : IComparable<T>
     {
-        public List<GraphNode<T>> V { get; set; }
-        public List<List<GraphNode<T>>> Adj { get; set; }
+        public IDictionary<T, GraphNode<T>> V { get; set; }
+        public IDictionary<GraphNode<T>, List<GraphNode<T>>> Adj { get; set; }
     }
 
     public class GraphManager
@@ -37,7 +37,7 @@ namespace PaniniEngine.Graphs
         public void BFS<T>(Graph<T> g, GraphNode<T> s)
             where T : IComparable<T>
         {
-            foreach (var u in g.V)
+            foreach (var u in g.V.Values)
             {
                 if (u != s)
                 {
@@ -54,8 +54,7 @@ namespace PaniniEngine.Graphs
             while (q.Count != 0)
             {
                 var u = q.Dequeue();
-                int index = g.V.IndexOf(u); // Posiblemente esté haciendo al algoritmo lento.
-                foreach (var v in g.Adj[index])
+                foreach (var v in g.Adj[u])
                 {
                     if (v.Color == GraphNodeColor.White)
                     {
@@ -77,8 +76,7 @@ namespace PaniniEngine.Graphs
             time++;
             u.Distance = time;
             u.Color = GraphNodeColor.Gray;
-            int index = g.V.IndexOf(u);
-            foreach (var v in g.Adj[index])
+            foreach (var v in g.Adj[u])
             {
                 if (v.Color == GraphNodeColor.White)
                 {
@@ -94,13 +92,13 @@ namespace PaniniEngine.Graphs
         public void DFS<T>(Graph<T> g)
             where T : IComparable<T>
         {
-            foreach (var u in g.V)
+            foreach (var u in g.V.Values)
             {
                 u.Color = GraphNodeColor.White;
                 u.Predecessor = null;
             }
             time = 0;
-            foreach (var u in g.V)
+            foreach (var u in g.V.Values)
             {
                 if (u.Color == GraphNodeColor.White)
                 {
@@ -108,5 +106,21 @@ namespace PaniniEngine.Graphs
                 }
             }
         }
+
+        //public bool DetectorCiclos<T>(Graph<T> g, GraphNode<T> actual, GraphNode<T> fijo)
+        //    where T : IComparable<T>
+        //{
+        //    bool ciclo = false;
+        //    GraphNode<T> vecino = new GraphNode<T>();
+
+        //    int index = g.V.IndexOf(actual);
+        //    g.V[index].Color = GraphNodeColor.Gray;
+
+        //    while (!ciclo)
+        //    {
+
+        //    }
+
+        //}
     }
 }
