@@ -14,10 +14,13 @@ namespace PaniniEngine.Graphs
         where T : IComparable<T>
     {
         public T Key { get; set; }
-        public int Distance { get; set; }
         public GraphNode<T> Predecessor { get; set; }
         public GraphNodeColor Color { get; set; }
-        public int FinishingTime { get; internal set; }
+
+        public int Distance { get; set; }
+
+        public int StartingTime { get; set; }
+        public int FinishingTime { get; set; }
 
         public int CompareTo(GraphNode<T> other)
         {
@@ -74,7 +77,7 @@ namespace PaniniEngine.Graphs
             where T : IComparable<T>
         {
             time++;
-            u.Distance = time;
+            u.StartingTime = time;
             u.Color = GraphNodeColor.Gray;
             foreach (var v in g.Adj[u])
             {
