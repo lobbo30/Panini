@@ -45,16 +45,17 @@ namespace PaniniTesting
             gm.DFS(grafo);
 
             Assert.IsTrue(grafo.V.Values.All(v => v.Color == GraphNodeColor.Black));
+            Assert.IsTrue(grafo.V.Values.All(v => v.DiscoveryTime < v.FinishingTime));
         }
 
         [TestMethod]
         public void DFS_WithBigNumberOfNodes()
         {
             const int number = 1000;
-            Dictionary<int, GraphNode<int>> vertices = new Dictionary<int, GraphNode<int>>();
+            Dictionary<int, GraphNode<int>> verteces = new Dictionary<int, GraphNode<int>>();
             for (int i = 0; i < number; i++)
             {
-                vertices.Add(i, new GraphNode<int>() { Key = i });
+                verteces.Add(i, new GraphNode<int>() { Key = i });
             }
 
             Random random = new Random();
@@ -66,17 +67,17 @@ namespace PaniniTesting
                 for (int i = 0; i < listLength; i++)
                 {
                     int key = random.Next(number);
-                    if (!temp.Contains(vertices[key])) // Esto hace que la prueba sea lenta. No es el algoritmo.
+                    if (!temp.Contains(verteces[key])) // Esto hace que la prueba sea lenta. No es el algoritmo.
                     {
-                        temp.Add(vertices[key]);
+                        temp.Add(verteces[key]);
                     }
                 }
-                adjs.Add(vertices[j], temp);
+                adjs.Add(verteces[j], temp);
             }
 
             Graph<int> grafo = new Graph<int>()
             {
-                V = vertices,
+                V = verteces,
                 Adj = adjs
             };
 
@@ -84,6 +85,7 @@ namespace PaniniTesting
             gm.DFS(grafo);
 
             Assert.IsTrue(grafo.V.Values.All(v => v.Color == GraphNodeColor.Black));
+            Assert.IsTrue(grafo.V.Values.All(v => v.DiscoveryTime < v.FinishingTime));
         }
     }
 }

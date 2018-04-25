@@ -19,7 +19,7 @@ namespace PaniniEngine.Graphs
 
         public int Distance { get; set; }
 
-        public int StartingTime { get; set; }
+        public int DiscoveryTime { get; set; }
         public int FinishingTime { get; set; }
 
         public int CompareTo(GraphNode<T> other)
@@ -77,7 +77,7 @@ namespace PaniniEngine.Graphs
             where T : IComparable<T>
         {
             time++;
-            u.StartingTime = time;
+            u.DiscoveryTime = time;
             u.Color = GraphNodeColor.Gray;
             foreach (var v in g.Adj[u])
             {
@@ -110,20 +110,44 @@ namespace PaniniEngine.Graphs
             }
         }
 
-        //public bool DetectorCiclos<T>(Graph<T> g, GraphNode<T> actual, GraphNode<T> fijo)
-        //    where T : IComparable<T>
-        //{
-        //    bool ciclo = false;
-        //    GraphNode<T> vecino = new GraphNode<T>();
+        public List<GraphNode<T>> TopologicalSort<T>(Graph<T> g)
+            where T : IComparable<T>
+        {
+            foreach (var u in g.V.Values)
+            {
+                u.Color = GraphNodeColor.White;
+                u.Predecessor = null;
+            }
+            time = 0;
+            List<GraphNode<T>> list = new List<GraphNode<T>>();
+            foreach (var u in g.V.Values)
+            {
+                if (u.Color == GraphNodeColor.White)
+                {
+                    TopologicalSort_Visit(g, u, list);
+                }
+            }
+            return list;
+        }
 
-        //    int index = g.V.IndexOf(actual);
-        //    g.V[index].Color = GraphNodeColor.Gray;
-
-        //    while (!ciclo)
-        //    {
-
-        //    }
-
-        //}
+        private void TopologicalSort_Visit<T>(Graph<T> g, GraphNode<T> u, List<GraphNode<T>> list)
+            where T : IComparable<T>
+        {
+            time++;
+            u.DiscoveryTime = time;
+            u.Color = GraphNodeColor.Gray;
+            foreach (var v in g.Adj[u])
+            {
+                if (v.Color == GraphNodeColor.White)
+                {
+                    v.Predecessor = u;
+                    TopologicalSort_Visit(g, v, list);
+                }
+            }
+            u.Color = GraphNodeColor.Black;
+            time++;
+            u.FinishingTime = time;
+            list.Insert(0, u);
+        }
     }
 }
