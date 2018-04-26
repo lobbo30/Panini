@@ -5,24 +5,24 @@ using System.Text;
 
 namespace PaniniEngine.Graphs
 {
-    public enum GraphNodeColor : byte
+    public enum VertexColor : byte
     {
         White, Gray, Black
     }
 
-    public class GraphNode<T> : IComparable<GraphNode<T>>
+    public class Vertex<T> : IComparable<Vertex<T>>
         where T : IComparable<T>
     {
         public T Key { get; set; }
-        public GraphNode<T> Predecessor { get; set; }
-        public GraphNodeColor Color { get; set; }
+        public Vertex<T> Predecessor { get; set; }
+        public VertexColor Color { get; set; }
 
         public int Distance { get; set; }
 
         public int DiscoveryTime { get; set; }
         public int FinishingTime { get; set; }
 
-        public int CompareTo(GraphNode<T> other)
+        public int CompareTo(Vertex<T> other)
         {
             return Key.CompareTo(other.Key);
         }
@@ -31,63 +31,63 @@ namespace PaniniEngine.Graphs
     public class Graph<T>
         where T : IComparable<T>
     {
-        public IDictionary<T, GraphNode<T>> V { get; set; }
-        public IDictionary<GraphNode<T>, List<GraphNode<T>>> Adj { get; set; }
+        public IDictionary<T, Vertex<T>> V { get; set; }
+        public IDictionary<Vertex<T>, List<Vertex<T>>> Adj { get; set; }
     }
 
     public class GraphManager
     {
-        public void BFS<T>(Graph<T> g, GraphNode<T> s)
+        public void BFS<T>(Graph<T> g, Vertex<T> s)
             where T : IComparable<T>
         {
             foreach (var u in g.V.Values)
             {
                 if (u != s)
                 {
-                    u.Color = GraphNodeColor.White;
+                    u.Color = VertexColor.White;
                     u.Distance = -1;
                     u.Predecessor = null;
                 }
             }
-            s.Color = GraphNodeColor.Gray;
+            s.Color = VertexColor.Gray;
             s.Distance = 0;
             s.Predecessor = null;
-            Queue<GraphNode<T>> q = new Queue<GraphNode<T>>();
+            Queue<Vertex<T>> q = new Queue<Vertex<T>>();
             q.Enqueue(s);
             while (q.Count != 0)
             {
                 var u = q.Dequeue();
                 foreach (var v in g.Adj[u])
                 {
-                    if (v.Color == GraphNodeColor.White)
+                    if (v.Color == VertexColor.White)
                     {
-                        v.Color = GraphNodeColor.Gray;
+                        v.Color = VertexColor.Gray;
                         v.Distance = u.Distance + 1;
                         v.Predecessor = u;
                         q.Enqueue(v);
                     }
                 }
-                u.Color = GraphNodeColor.Black;
+                u.Color = VertexColor.Black;
             }
         }
 
         private int time;
 
-        private void DFS_Visit<T>(Graph<T> g, GraphNode<T> u)
+        private void DFS_Visit<T>(Graph<T> g, Vertex<T> u)
             where T : IComparable<T>
         {
             time++;
             u.DiscoveryTime = time;
-            u.Color = GraphNodeColor.Gray;
+            u.Color = VertexColor.Gray;
             foreach (var v in g.Adj[u])
             {
-                if (v.Color == GraphNodeColor.White)
+                if (v.Color == VertexColor.White)
                 {
                     v.Predecessor = u;
                     DFS_Visit(g, v);
                 }
             }
-            u.Color = GraphNodeColor.Black;
+            u.Color = VertexColor.Black;
             time++;
             u.FinishingTime = time;
         }
@@ -97,32 +97,32 @@ namespace PaniniEngine.Graphs
         {
             foreach (var u in g.V.Values)
             {
-                u.Color = GraphNodeColor.White;
+                u.Color = VertexColor.White;
                 u.Predecessor = null;
             }
             time = 0;
             foreach (var u in g.V.Values)
             {
-                if (u.Color == GraphNodeColor.White)
+                if (u.Color == VertexColor.White)
                 {
                     DFS_Visit(g, u);
                 }
             }
         }
 
-        public List<GraphNode<T>> TopologicalSort<T>(Graph<T> g)
+        public List<Vertex<T>> TopologicalSort<T>(Graph<T> g)
             where T : IComparable<T>
         {
             foreach (var u in g.V.Values)
             {
-                u.Color = GraphNodeColor.White;
+                u.Color = VertexColor.White;
                 u.Predecessor = null;
             }
             time = 0;
-            List<GraphNode<T>> list = new List<GraphNode<T>>();
+            List<Vertex<T>> list = new List<Vertex<T>>();
             foreach (var u in g.V.Values)
             {
-                if (u.Color == GraphNodeColor.White)
+                if (u.Color == VertexColor.White)
                 {
                     TopologicalSort_Visit(g, u, list);
                 }
@@ -130,21 +130,21 @@ namespace PaniniEngine.Graphs
             return list;
         }
 
-        private void TopologicalSort_Visit<T>(Graph<T> g, GraphNode<T> u, List<GraphNode<T>> list)
+        private void TopologicalSort_Visit<T>(Graph<T> g, Vertex<T> u, List<Vertex<T>> list)
             where T : IComparable<T>
         {
             time++;
             u.DiscoveryTime = time;
-            u.Color = GraphNodeColor.Gray;
+            u.Color = VertexColor.Gray;
             foreach (var v in g.Adj[u])
             {
-                if (v.Color == GraphNodeColor.White)
+                if (v.Color == VertexColor.White)
                 {
                     v.Predecessor = u;
                     TopologicalSort_Visit(g, v, list);
                 }
             }
-            u.Color = GraphNodeColor.Black;
+            u.Color = VertexColor.Black;
             time++;
             u.FinishingTime = time;
             list.Insert(0, u);
