@@ -63,6 +63,9 @@
     <Compile Include="BFSTests.cs" />
     <Compile Include="DFSTests.cs" />
     <Compile Include="TopologicalSortTests.cs" />
+    <Compile Include="UnitTest1.cs" />
+    <Compile Include="UnitTest2.cs" />
+    <Compile Include="UnitTest3.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PaniniEngine\PaniniEngine.csproj">
