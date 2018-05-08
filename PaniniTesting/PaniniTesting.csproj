@@ -60,12 +60,14 @@
     <Compile Include="GetFiguritasRepetidasTests.cs" />
     <Compile Include="IntersectarTests.cs" />
     <Compile Include="PuedeIntercambiarTests.cs" />
-    <Compile Include="BFSTests.cs" />
-    <Compile Include="DFSTests.cs" />
-    <Compile Include="TopologicalSortTests.cs" />
-    <Compile Include="UnitTest1.cs" />
-    <Compile Include="UnitTest2.cs" />
-    <Compile Include="UnitTest3.cs" />
+    <Compile Include="Graph\BFSTests.cs" />
+    <Compile Include="Graph\DFSTests.cs" />
+    <Compile Include="Graph\TopologicalSortTests.cs" />
+    <Compile Include="Graph\UnitTest1.cs" />
+    <Compile Include="Graph\UnitTest2.cs" />
+    <Compile Include="Graph\TransposeTests.cs" />
+    <Compile Include="Graph\GraphEqualsTests.cs" />
+    <Compile Include="Graph\VertexEqualsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PaniniEngine\PaniniEngine.csproj">

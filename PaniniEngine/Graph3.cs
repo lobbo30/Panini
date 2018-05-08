@@ -10,9 +10,10 @@ namespace PaniniEngine.Graphs3
         White, Gray, Black
     }
 
-    public class Vertex<T> : IEquatable<Vertex<T>>
-        where T : IComparable<T>
+    public class Vertex<T> : IEquatable<Vertex<T>>, ICloneable
+        where T : IEquatable<T>
     {
+        //public int VertexId { get; set; }
         public T Key { get; set; }
         public Vertex<T> Predecessor { get; set; }
         public VertexColor Color { get; set; }
@@ -23,13 +24,18 @@ namespace PaniniEngine.Graphs3
         public int DiscoveryTime { get; set; }
         public int FinishingTime { get; set; }
 
+        public Vertex()
+        {
+            Adj = new List<Vertex<T>>();
+        }
+
         public bool Equals(Vertex<T> other)
         {
             if (other == null)
             {
                 return false;
             }
-            if (Key.Equals(other.Key) && Adj.Equals(other.Adj))
+            if (Key.Equals(other.Key) && Adj.SequenceEqual(other.Adj)) // Tener cuidado con Adj
             {
                 return true;
             }
@@ -59,7 +65,18 @@ namespace PaniniEngine.Graphs3
             return Key.GetHashCode();
         }
 
-        public static bool operator == (Vertex<T> vertex1, Vertex<T> vertex2)
+        public object Clone()
+        {
+            Vertex<T> clone = new Vertex<T>();
+            clone.Key = Key;
+            foreach (var adj in Adj)
+            {
+                clone.Adj.Add(adj);
+            }
+            return clone;
+        }
+
+        public static bool operator ==(Vertex<T> vertex1, Vertex<T> vertex2)
         {
             if ((object)vertex1 == null || (object)vertex2 == null)
             {
@@ -68,7 +85,7 @@ namespace PaniniEngine.Graphs3
             return vertex1.Equals(vertex2);
         }
 
-        public static bool operator != (Vertex<T> vertex1, Vertex<T> vertex2)
+        public static bool operator !=(Vertex<T> vertex1, Vertex<T> vertex2)
         {
             if ((object)vertex1 == null || (object)vertex2 == null)
             {
@@ -78,10 +95,25 @@ namespace PaniniEngine.Graphs3
         }
     }
 
-    public class Graph<T> : IEquatable<Graph<T>>
-        where T : IComparable<T>
+    public class Graph<T> : IEquatable<Graph<T>>, ICloneable
+        where T : IEquatable<T>
     {
-        public IDictionary<T, Vertex<T>> V { get; set; }
+        public Dictionary<T, Vertex<T>> V { get; set; }
+
+        public Graph()
+        {
+            V = new Dictionary<T, Vertex<T>>();
+        }
+
+        public object Clone()
+        {
+            Graph<T> clone = new Graph<T>();
+            foreach (var kvp in V)
+            {
+                clone.V.Add(kvp.Key, kvp.Value);
+            }
+            return clone;
+        }
 
         public bool Equals(Graph<T> other)
         {
@@ -89,7 +121,7 @@ namespace PaniniEngine.Graphs3
             {
                 return false;
             }
-            if (V.Equals(other.V))
+            if (V.SequenceEqual(other.V))
             {
                 return true;
             }
@@ -119,7 +151,7 @@ namespace PaniniEngine.Graphs3
             return V.GetHashCode();
         }
 
-        public static bool operator == (Graph<T> graph1, Graph<T> graph2)
+        public static bool operator ==(Graph<T> graph1, Graph<T> graph2)
         {
             if ((object)graph1 == null || (object)graph2 == null)
             {
@@ -128,7 +160,7 @@ namespace PaniniEngine.Graphs3
             return graph1.Equals(graph2);
         }
 
-        public static bool operator != (Graph<T> graph1, Graph<T> graph2)
+        public static bool operator !=(Graph<T> graph1, Graph<T> graph2)
         {
             if ((object)graph1 == null || (object)graph2 == null)
             {
@@ -141,7 +173,7 @@ namespace PaniniEngine.Graphs3
     public class GraphManager
     {
         public void BFS<T>(Graph<T> g, Vertex<T> s)
-            where T : IComparable<T>
+            where T : IEquatable<T>
         {
             foreach (var u in g.V.Values)
             {
@@ -177,7 +209,7 @@ namespace PaniniEngine.Graphs3
         private static int time;
 
         public void DFS<T>(Graph<T> g)
-            where T : IComparable<T>
+            where T : IEquatable<T>
         {
             foreach (var u in g.V.Values)
             {
@@ -195,7 +227,7 @@ namespace PaniniEngine.Graphs3
         }
 
         private void DFS_Visit<T>(Graph<T> g, Vertex<T> u)
-            where T : IComparable<T>
+            where T : IEquatable<T>
         {
             time++;
             u.DiscoveryTime = time;
@@ -211,6 +243,24 @@ namespace PaniniEngine.Graphs3
             u.Color = VertexColor.Black;
             time++;
             u.FinishingTime = time;
+        }
+
+        public Graph<T> Transpose<T>(Graph<T> g)
+            where T : IEquatable<T>
+        {
+            Graph<T> transposed = new Graph<T>();
+            foreach (var kvp in g.V)
+            {
+                transposed.V.Add(kvp.Key, new Vertex<T>() { Key = kvp.Key });
+            }
+            foreach (var vertex in g.V.Values)
+            {
+                foreach (var adj in vertex.Adj)
+                {
+                    transposed.V[adj.Key].Adj.Add(transposed.V[vertex.Key]);
+                }
+            }
+            return transposed;
         }
     }
 }
